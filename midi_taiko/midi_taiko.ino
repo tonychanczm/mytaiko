@@ -1,4 +1,6 @@
-#include "Keyboard.h"
+#include <USB-MIDI.h>
+
+USBMIDI_CREATE_DEFAULT_INSTANCE();
 
 int leftBlue = A0; // left-blue
 int rightRed = A1; // right-red
@@ -6,11 +8,11 @@ int rightBlue = A2; // right-blue
 int leftRed = A3; // left-red
 
 int pins[4] = {leftBlue, leftRed, rightRed, rightBlue};
-uint8_t pinKey[4] = {'d', 'f', 'j', 'k'};
-int requireForces[4] = {60, 60, 60, 60}; // 0~1023
+uint8_t pinKey[4] = {40, 41, 42, 43};
+int requireForces[4] = {80, 80, 80, 80}; // 0~1023
 
 void setup() {
-  Keyboard.begin();
+  MIDI.begin();
 }
 
 void loop() {
@@ -27,9 +29,8 @@ void loop() {
   // TODO Async keyboard control
   if (maxIndex != -1) {
     uint8_t key = pinKey[maxIndex];
-    Keyboard.press(key);
+    MIDI.sendNoteOn(key, 127, 1);
     delay(30);
-    Keyboard.release(key);
   }
 
 }
